@@ -1,0 +1,4 @@
+Changelog for CCE_v1.0b
+
+A bug was fixed concerning the definition of the groups in the main file:
+	CompChaEst.m, line 478

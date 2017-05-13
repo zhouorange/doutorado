@@ -1,0 +1,32 @@
+BEFORE USING FOR THE FIRST TIME:
+-you must execute the following two matlab commands:
+   mex -largeArrayDims ldpc_generate1.c
+   mex -largeArrayDims ldpc_h2g1.c
+ which will provide the platform-specific files ldpc_generate1.mex* and ldpc_h2g1.mex*
+
+Essential files:
+1) noncoh2.m -- the main file.  running without arguments uses the defaults set at the beginning of the file.
+2) prop_chan.m -- called by noncoh2 to generate a UWB channel realization 
+3) mc_decode2.m -- called by noncoh2 to do Markov-chain decoding
+4) softdecode.m -- called by noncoh2 to do soft symbol decoding
+5) ldpc_decode1.m -- called by noncoh2 to do LDPC decoding 
+6) gmstats_*.mat -- channel statistics loaded by noncoh2 and user generated (when needed) by ofdm_chan.m
+7) pargen/pargen_*.mat -- LDPC code matrices loaded by noncoh2 and generated (when needed) via... 
+8) ldpc_generate1.mex* -- called by noncoh2 to do LDPC code matrix design
+9) ldpc_h2g1.mex* --  called by noncoh2 to do LDPC code matrix design 
+
+Optional files:
+1) ofdm_chan.m -- used to generate OFDM channel statistics.  you will need to run this iff you change the UWB channel parameters.
+2) ldpc_generate1.m -- help file for ldpc_generate1.mex*
+3) ldpc_h2g1.m -- help file for ldpc_h2g1.mex*
+
+Optional external packages:
+1) SPGL1 software (http://www.cs.ubc.ca/labs/scl/spgl1/) provides LASSO/BPDN reconstruction algorithms that are needed if you turn on the LASSO options. 
+
+Acknowledgements:
+The LDPC coding/decoding routines "ldpc_*" above are all small modifications of Kozintzev's LDPC software (http://www.kozintsev.net/soft.html).  
+
+
+Phil Schniter (schniter@ece.osu.edu)
+The Ohio State University
+Nov 10, 2011.

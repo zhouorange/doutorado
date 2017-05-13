@@ -1,0 +1,10 @@
+clear all;close all;clc
+
+
+v = linspace(0.01:);                                                             % Speed in m/s.  
+fc = 1800e6;                                                         % Carrier Freq. in MHz.
+c = 3e8;                                                            % Light speed in m/s.                                                       % Sampling period in seconds.
+
+fd = (v*fc)/c;
+
+
