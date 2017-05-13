@@ -1,0 +1,27 @@
+clear all;close all;clc
+
+%% ---------- PRACH Definitions ----------
+u = 129;
+Nzc = 839;
+NIDFT = 24576;
+Ncp = 3168;
+v = [0 5 10 15 20 25 30 35 40 45];
+Ncs = 13;
+position = mod(Nzc-v.*Ncs,Nzc) + 1; % Position of the start of the window. Plus one to correct address matlab vectors.
+prach_offset = 10;
+
+%% ------- Generate Root Zadoff-Chu sequence. -------
+n = [0:1:(Nzc-1)];
+xu_root = exp(-1i*(pi*u.*n.*(n+1))./Nzc);
+
+% ------- Apply DFT to Root Zadoff-Chu sequence. -------
+Xu_root = fft(xu_root, Nzc);
+
+% ------- Apply Cyclic Shift to Root Zadoff-Chu sequence. -------
+Cv = v(1)*Ncs;
+xuv = xu_root(mod((n+Cv),Nzc)+1);
+
+% ------- Apply DFT to the Preamble. -------
+Xuv = fft(xuv,Nzc);
+
+Nzc
