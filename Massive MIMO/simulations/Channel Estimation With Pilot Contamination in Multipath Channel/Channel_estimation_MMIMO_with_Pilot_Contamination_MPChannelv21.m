@@ -6,7 +6,7 @@ SNR = -10:2:18;                     % Signal-to-noise ratio in dB.
 
 M = 30;                             % Number of antennas.
 K = 10;                             % Number of single-antenna users.
-P = 10;                             % Channel Length (Finite Impulse Response - FIR).
+P = 20;                             % Channel Length (Finite Impulse Response - FIR).
 L = 7;                              % Number of cells.
 
 N = getPilotLength(K,P);            % Pilot length is set according to K and P.
