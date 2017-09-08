@@ -29,10 +29,10 @@ markerSize = 8;
 fdee_figure = figure;
 
 subplot(1,2,1)
-loglog(a,theoretical_mmse_error_m30,'k-','MarkerSize', markerSize, 'LineWidth', lineWidth);
+loglog(a,theoretical_mmse_error_m30,'r-','MarkerSize', markerSize, 'LineWidth', lineWidth);
 hold on;
 loglog(a,theoretical_ls_error_m30,'bv-','MarkerSize', markerSize, 'LineWidth', lineWidth);
-loglog(a,real(prop_4_ana_error_vec_m30),'r*-','MarkerSize', markerSize, 'LineWidth', lineWidth);
+loglog(a,real(prop_4_ana_error_vec_m30),'k*-','MarkerSize', markerSize, 'LineWidth', lineWidth);
 hold off
 grid on;
 xlabel('Cross-Cell Interference, \it{a}')
@@ -51,10 +51,10 @@ set(gca, 'defaultTextFontName', 'Times New Roman')
 set(tx1, 'FontName', 'Times New Roman')
 
 subplot(1,2,2)
-loglog(a,theoretical_mmse_error_m90,'k-','MarkerSize', markerSize, 'LineWidth', lineWidth);
+loglog(a,theoretical_mmse_error_m90,'r-','MarkerSize', markerSize, 'LineWidth', lineWidth);
 hold on;
 loglog(a,theoretical_ls_error_m90,'bv-','MarkerSize', markerSize, 'LineWidth', lineWidth);
-loglog(a,real(prop_4_ana_error_vec_m90),'r*-','MarkerSize', markerSize, 'LineWidth', lineWidth);
+loglog(a,real(prop_4_ana_error_vec_m90),'k*-','MarkerSize', markerSize, 'LineWidth', lineWidth);
 hold off
 grid on;
 xlabel('Cross-Cell Interference, \it{a}')

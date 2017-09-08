@@ -39,7 +39,7 @@ set(leg1, 'FontName', 'Times New Roman', 'FontSize', fontSize)
 set(gca, 'defaultAxesFontName', 'Times New Roman')
 set(gca, 'defaultTextFontName', 'Times New Roman')
 
-scaleFactor = 1.6;
+scaleFactor = 1.55;
 set(gcf, 'Position', [100, 100, ceil(scaleFactor*560), ceil(scaleFactor*420)])
 
 fprintf(1,'SNR: %d dB\n', SNR);

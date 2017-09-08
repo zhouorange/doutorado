@@ -23,7 +23,7 @@ if(1)
     semilogy(SNR_aux,real(prop_2_sim_error_vec(SNR_idx_start:SNR_idx_end)),'-kv','MarkerSize',markerSize, 'LineWidth', lineWidth);
     semilogy(SNR_aux,real(prop_3_sim_error_vec(SNR_idx_start:SNR_idx_end)),'-ko','MarkerSize',markerSize, 'LineWidth', lineWidth);
     semilogy(SNR_aux,real(prop_4_sim_error_vec(SNR_idx_start:SNR_idx_end)),'-ks','MarkerSize',markerSize, 'LineWidth', lineWidth);
-    semilogy(SNR_aux,theoretical_mmse_error(SNR_idx_start:SNR_idx_end),'--r*','MarkerSize',markerSize, 'LineWidth', lineWidth);
+    semilogy(SNR_aux,theoretical_mmse_error(SNR_idx_start:SNR_idx_end),'--r','MarkerSize',markerSize, 'LineWidth', lineWidth);
 end
 
 if(0)

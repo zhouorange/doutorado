@@ -20,13 +20,13 @@ markerSize = 8;
 fdee_figure = figure;
 
 subplot(2,1,1)
-semilogy(SNR_aux,theoretical_mmse_error(SNR_idx_start:SNR_idx_end),'--r','MarkerSize',markerSize, 'LineWidth', lineWidth);
+semilogy(SNR_aux,theoretical_mmse_error(SNR_idx_start:SNR_idx_end),'-r','MarkerSize',markerSize, 'LineWidth', lineWidth);
 hold on;
 semilogy(SNR_aux,real(mmse_error_vec(SNR_idx_start:SNR_idx_end)),'r*','MarkerSize',markerSize, 'LineWidth', lineWidth);
-semilogy(SNR_aux,theoretical_ls_error(SNR_idx_start:SNR_idx_end),'--b','MarkerSize',markerSize, 'LineWidth', lineWidth);
-semilogy(SNR_aux,real(ls_error_vec(SNR_idx_start:SNR_idx_end)),'b*','MarkerSize',markerSize, 'LineWidth', lineWidth);
+semilogy(SNR_aux,theoretical_ls_error(SNR_idx_start:SNR_idx_end),'-.b','MarkerSize',markerSize, 'LineWidth', lineWidth);
+semilogy(SNR_aux,real(ls_error_vec(SNR_idx_start:SNR_idx_end)),'bo','MarkerSize',markerSize, 'LineWidth', lineWidth);
 semilogy(SNR_aux,real(theoretical_prop_error(SNR_idx_start:SNR_idx_end)),'--k','MarkerSize',markerSize, 'LineWidth', lineWidth);
-semilogy(SNR_aux,real(prop_error_vec(SNR_idx_start:SNR_idx_end)),'ko','MarkerSize',markerSize, 'LineWidth', lineWidth);
+semilogy(SNR_aux,real(prop_error_vec(SNR_idx_start:SNR_idx_end)),'k^','MarkerSize',markerSize, 'LineWidth', lineWidth);
 hold off
 grid on;
 axis([snrStart snrEnd 0.2 5])
@@ -52,11 +52,11 @@ SNR_idx_end = find(SNR==snrEnd);
 SNR_aux = SNR(SNR_idx_start):1:SNR(SNR_idx_end);
 
 subplot(2,1,2)
-semilogy(SNR_aux,theoretical_mmse_error(SNR_idx_start:SNR_idx_end),'--r','MarkerSize',markerSize, 'LineWidth', lineWidth);
+semilogy(SNR_aux,theoretical_mmse_error(SNR_idx_start:SNR_idx_end),'-r','MarkerSize',markerSize, 'LineWidth', lineWidth);
 hold on;
 semilogy(SNR_aux,real(mmse_error_vec(SNR_idx_start:SNR_idx_end)),'r*','MarkerSize',markerSize, 'LineWidth', lineWidth);
 semilogy(SNR_aux,real(theoretical_prop_error(SNR_idx_start:SNR_idx_end)),'--k','MarkerSize',markerSize, 'LineWidth', lineWidth);
-semilogy(SNR_aux,real(prop_error_vec(SNR_idx_start:SNR_idx_end)),'k*','MarkerSize',markerSize, 'LineWidth', lineWidth);
+semilogy(SNR_aux,real(prop_error_vec(SNR_idx_start:SNR_idx_end)),'k^','MarkerSize',markerSize, 'LineWidth', lineWidth);
 hold off
 grid on;
 axis([-15 10 0.228 0.31])

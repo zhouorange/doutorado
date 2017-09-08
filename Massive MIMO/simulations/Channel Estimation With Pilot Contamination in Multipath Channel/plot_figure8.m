@@ -13,7 +13,7 @@ markerSize = 8;
 fdee_figure = figure;
 semilogy(SNR(startSNR:endSNR),theoretical_mmse_error_vec(startSNR:endSNR),'r','MarkerSize', markerSize, 'LineWidth', lineWidth);
 hold on;
-semilogy(SNR(startSNR:endSNR),theoretical_ls_error_vec(startSNR:endSNR),'b','MarkerSize', markerSize, 'LineWidth', lineWidth);
+semilogy(SNR(startSNR:endSNR),theoretical_ls_error_vec(startSNR:endSNR),'b^-','MarkerSize', markerSize, 'LineWidth', lineWidth);
 semilogy(SNR(startSNR:endSNR),theoretical_prop_error_vec(startSNR:endSNR),'ko-','MarkerSize', markerSize, 'LineWidth', lineWidth);
 semilogy(SNR(startSNR:endSNR),real(prop_error_vec(startSNR:endSNR)),'k*','MarkerSize', markerSize, 'LineWidth', lineWidth);
 semilogy(SNR(startSNR:endSNR),real(prop_error_vec_hat1(startSNR:endSNR)),'k-.','MarkerSize', markerSize, 'LineWidth', lineWidth);

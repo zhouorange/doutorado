@@ -43,15 +43,28 @@ for m_idx=1:1:length(M)
     fprintf(1, 'M: %d\n',M(m_idx));
 end
 
-semilogy(SNR,distance(1,:));
+fontSize = 12;
+lineWidth = 1;
+markerSize = 8;
+
+semilogy(SNR,distance(1,:),'s-','MarkerSize', markerSize, 'LineWidth', lineWidth);
 hold on
-semilogy(SNR,distance(2,:));
-semilogy(SNR,distance(3,:));
-semilogy(SNR,distance(4,:));
-semilogy(SNR,distance(5,:));
+semilogy(SNR,distance(2,:),'o-','MarkerSize', markerSize, 'LineWidth', lineWidth);
+semilogy(SNR,distance(3,:),'x-','MarkerSize', markerSize, 'LineWidth', lineWidth);
+semilogy(SNR,distance(4,:),'^-','MarkerSize', markerSize, 'LineWidth', lineWidth);
+semilogy(SNR,distance(5,:),'+-','MarkerSize', markerSize, 'LineWidth', lineWidth);
 xlabel('SNR[dB]')
 ylabel('Distance between Prop. and MMSE estimators')
 %axis([SNR(1) SNR(length(SNR)) 9e-6 0.005])
-legend('M = 10','M = 30','M = 50','M = 70','M = 90','Location','southeast')
+leg1 = legend('M = 10','M = 30','M = 100','M = 200','M = 500','Location','southeast');
 grid on
 hold off
+
+set(gca, 'FontName', 'Times New Roman', 'FontSize', fontSize)
+set(leg1, 'FontName', 'Times New Roman', 'FontSize', fontSize)
+set(gca, 'defaultAxesFontName', 'Times New Roman')
+set(gca, 'defaultTextFontName', 'Times New Roman')
+
+scaleFactor = 1.6;
+set(gcf, 'Position', [100, 100, ceil(scaleFactor*560), ceil(scaleFactor*420)])
+
