@@ -2,9 +2,10 @@ clear all;close all;clc
 
 rng(1)
 
-SNR = -16:2:22;     % Signal-to-noise ratio in dB.
+SNR = -10:4:30;     % Signal-to-noise ratio in dB.
+linear_SNR = 10.^(SNR./10);
 
-M = 30;%30; %85;    % Number of antennas.
+M = 70;             % Number of antennas.
 K = 10;             % Number of single-antenna users.
 L = 7;              % Number of cells.
 
@@ -13,28 +14,29 @@ N = K;              % Pilot length is set according to K and P.
 a = 0.05;           % Constant beta value.
 beta111 = 1;
 
+q = linear_SNR/(N*(1 + a*(L-1)));  % Uplink pilot power.
+
 NUM_ITER = 10000;
 
 % Generate pilot signals.
-S = generatePilotMatrixFFT(N);
-
-% Uplink pilot power.
-SNR_linear = 10.^(SNR./10); 
-
-q = SNR_linear/N*(1+a*(L-1));
+S = generatePilotMatrixFFT(N,K);
 
 theoretical_ls_error = zeros(1,length(q));
 theoretical_mmse_error = zeros(1,length(q));
+theoretical_proposed_error = zeros(1,length(q));
+theoretical_proposed_approx_error = zeros(1,length(q));
 ls_error_vec = zeros(1,length(q));
 mmse_error_vec = zeros(1,length(q));
+prop_error_vec = zeros(1,length(q));
 for q_idx=1:1:length(q)
     
     ls_error = 0;
     mmse_error = 0;
+    prop_error = 0;
     for numIter = 1:1:NUM_ITER
         
         beta_sum = 0;
-        sum_G = zeros(M,K);
+        sum_G = zeros(M,N);
         Gil = zeros(M,K,L);
         for l=1:1:L
             
@@ -61,20 +63,22 @@ for q_idx=1:1:length(q)
         sum_G = sqrt(q(q_idx))*sum_G;
         
         % Generate noise.
-        W1 = (1/sqrt(2))*complex(randn(M,K),randn(M,K));
+        W1 = (1/sqrt(2))*complex(randn(M,N),randn(M,N));
         
         % received pilot symbols at BS.
         Y1 = sum_G + W1;
         
         % ******* LS ********
-        Z11_ls = (1/(sqrt(q(q_idx))*N))*Y1*S(:,1);
-        
+        Z11_ls = (1/(sqrt(q(q_idx))*N))*Y1*S(:,1);       
         ls_error = ls_error + ((Z11_ls'-Gil(:,1,1)')*(Z11_ls-Gil(:,1,1)));
         
         % ******* MMSE ********
         Z11_mmse = (beta111/epsilon11)*Z11_ls;
-        
         mmse_error = mmse_error + ((Z11_mmse'-Gil(:,1,1)')*(Z11_mmse-Gil(:,1,1)));
+        
+        % ******* Prop. ********
+        Z11_prop = M*beta111*Z11_ls/((Z11_ls')*(Z11_ls));
+        prop_error = prop_error + ((Z11_prop'-Gil(:,1,1)')*(Z11_prop-Gil(:,1,1)));
     end
     
     fprintf('SNR: %d\n',SNR(q_idx));
@@ -92,7 +96,20 @@ for q_idx=1:1:length(q)
     
     % Minimum Mean Squared Error (MMSE) Theoretical error.
     theoretical_mmse_error(q_idx) = (beta111/epsilon11) * (epsilon11 - beta111);
+    
+    % Proposed estimator Simulation Error (Monte Carlo)
+    prop_error = prop_error./(M * NUM_ITER);
+    prop_error_vec(q_idx) = prop_error;   
+    
+    % Proposed estimator Theoretical error.
+    theta_ik = calculateTheta_ikv2(beta111, epsilon11, M);
+    theoretical_proposed_error(q_idx) = ((M/(M-1))*((beta111^2)/epsilon11)) + beta111 - 2*beta111*theta_ik;
+    
+    % Proposed estimator Approximated error.
+    theoretical_proposed_approx_error(q_idx) = (beta111*((((2-M)*beta111)/((M-1)*epsilon11)) + 1));
 end
+
+fontSize = 10;
 
 fdee_figure = figure;
 semilogy(SNR,theoretical_mmse_error,'--r');
@@ -100,19 +117,26 @@ hold on;
 semilogy(SNR,real(mmse_error_vec),'r*','MarkerSize',7);
 semilogy(SNR,theoretical_ls_error,'--b','MarkerSize',7);
 semilogy(SNR,real(ls_error_vec),'b*','MarkerSize',7);
+semilogy(SNR,real(theoretical_proposed_approx_error),'--k','MarkerSize',7);
+%semilogy(SNR,real(theoretical_proposed_error),'--k','MarkerSize',7);
+semilogy(SNR,real(prop_error_vec),'k*','MarkerSize',7);
 hold off
 grid on;
-%axis([-10 22 0.2 8.004])
 xlabel('SNR [dB]')
 ylabel('MSE')
-legend('MMSE (ana)','MMSE (sim)','LS (ana)', 'LS (sim)');
+legend('MMSE (analytical)','MMSE (simulated)','LS (analytical)', 'LS (simulated)', 'Prop. (approximated)', 'Prop. (simulated)');
+axis([SNR(1) SNR(length(SNR)) 0.18 5.1])
+strText = sprintf('M = %d, a = %1.2f',M,a);
+x1 = SNR(length(SNR))-12;
+y1 = 1;
+text(x1,y1,strText,'FontSize', fontSize)
 
 % Get timestamp for saving files.
 timeStamp = datestr(now,30);
-fileName = sprintf('flat_channel_estimation_mse_vs_tx_snr_M%d_K%d_L%d_N%d_v2_%s.fig',M,K,L,N,timeStamp);
+fileName = sprintf('Figure1_MSE_versus_TX_SNR_M%d_K%d_L%d_N%d_v0_%s.fig',M,K,L,N,timeStamp);
 savefig(fdee_figure,fileName);
 
 % Save workspace to .mat file.
 clear fdee_figure
-fileName = sprintf('flat_channel_estimation_mse_vs_tx_snr_M%d_K%d_L%d_N%d_v2_%s.mat',M,K,L,N,timeStamp);
+fileName = sprintf('Figure1_MSE_versus_TX_SNR_M%d_K%d_L%d_N%d_v0_%s.mat',M,K,L,N,timeStamp);
 save(fileName);

@@ -4,14 +4,14 @@ rng(1)
 
 SNR = 10;           % Signal-to-noise ratio in dB.
 
-M = 90;             % Number of antennas.
+M = 30;             % Number of antennas.
 K = 10;             % Number of single-antenna users.
 L = 7;              % Number of cells.
 
 N = K;              % Pilot length is set according to K and P.
 q = 10.^(SNR./10);  % Uplink pilot power.
 
-a = logspace(-3, 1, 40);        % Interferance leval value.
+a = logspace(-2, 1, 10);        % Interferance leval value.
 beta111 = 1;
 
 NUM_ITER = 10000;
@@ -100,7 +100,7 @@ for a_idx=1:1:length(a)
     
     % Proposed estimator Theoretical error.
     theta_ik = calculateTheta_ikv2(beta111, epsilon11, M);
-    theoretical_proposed_error(a_idx) = ((M/(M-1))*((beta111^2)/epsilon11)) + beta111 - 2*beta111*theta_ik;
+    %theoretical_proposed_error(a_idx) = ((M/(M-1))*((beta111^2)/epsilon11)) + beta111 - 2*beta111*theta_ik;
     
     % Proposed estimator Approximated error.
     theoretical_proposed_approx_error(a_idx) = (beta111*((((2-M)*beta111)/((M-1)*epsilon11)) + 1));
@@ -114,14 +114,14 @@ hold on;
 loglog(a,real(mmse_error_vec),'b*','MarkerSize',7);
 loglog(a,real(theoretical_ls_error),'-g','MarkerSize',7);
 loglog(a,real(ls_error_vec),'g*','MarkerSize',7);
-loglog(a,real(theoretical_proposed_error),'-r','MarkerSize',7);
-loglog(a,real(theoretical_proposed_approx_error),'rx','MarkerSize',7);
-loglog(a,real(prop_error_vec),'ro','MarkerSize',7);
+%loglog(a,real(theoretical_proposed_error),'-r','MarkerSize',7);
+loglog(a,real(theoretical_proposed_approx_error),'-r','MarkerSize',7);
+loglog(a,real(prop_error_vec),'r*','MarkerSize',7);
 hold off
 grid on;
 xlabel('a')
 ylabel('MSE')
-legend('MMSE (ana)','MMSE (sim)','LS (ana)', 'LS (sim)', 'Prop. (ana)', 'Prop. (approx.)', 'Prop. (sim)', 'Location','northwest');
+legend('MMSE (analytical)','MMSE (simulated)','LS (analytical)', 'LS (simulated)', 'Prop. (approximated)', 'Prop. (simulated)', 'Location','northwest');
 strText = sprintf('M = %d, q = %1.0f dB',M,q);
 x1 = a(1)+(30/100)*a(1);
 y1 = 1.5;

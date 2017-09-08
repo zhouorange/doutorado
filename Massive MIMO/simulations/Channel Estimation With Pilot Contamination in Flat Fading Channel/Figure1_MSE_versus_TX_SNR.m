@@ -5,7 +5,7 @@ rng(1)
 SNR = -10:4:30;     % Signal-to-noise ratio in dB.
 linear_SNR = 10.^(SNR./10);
 
-M = 70;             % Number of antennas.
+M = 500;             % Number of antennas.
 K = 10;             % Number of single-antenna users.
 L = 7;              % Number of cells.
 
