@@ -4,7 +4,7 @@ M = 10;
 zeta = 2;
 beta_iik = 1;
 
-numIter = 10000000;
+numIter = 1000000;
 z1_acc = zeros(1,numIter);
 z2_acc = zeros(1,numIter);
 zM_acc = zeros(1,numIter);
@@ -13,9 +13,9 @@ for iter=1:1:numIter
     x = sqrt(zeta)*(1/sqrt(2))*complex(randn(M,1),randn(M,1));
     
     denominator = (x'*x);
-    z1 = M*beta_iik*(x(1,:) / denominator);
-    z2 = M*beta_iik*(x(2,:) / denominator);
-    zM = M*beta_iik*(x(M,:) / denominator);
+    z1 = M*beta_iik*(x(1,1) / denominator);
+    z2 = M*beta_iik*(x(2,1) / denominator);
+    zM = M*beta_iik*(x(M,1) / denominator);
     
     z1_acc(iter) = z1;
     z2_acc(iter) = z2;
@@ -39,5 +39,7 @@ theoretical_var = (M/(M-1))*((beta_iik^2)/zeta);
 
 figure(1)
 hist(real(z1_acc),1000)
+title('Histogram of the real part of z')
 figure(2)
 hist(imag(z1_acc),1000)
+title('Histogram of the imag part of z')
