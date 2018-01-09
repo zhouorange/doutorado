@@ -32,13 +32,13 @@ model.add(Dense(M*K*2, activation='linear'))
 sgd = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
 
 # Compile model.
-model.compile(loss='categorical_crossentropy', optimizer=sgd, metrics=['accuracy'])
+model.compile(loss='mean_absolute_error', optimizer=sgd, metrics=['accuracy'])
 
 # Train model.
-model.fit(x_train, y_train, epochs=20, batch_size=128)
+model.fit(x_train, y_train, epochs=100, batch_size=100)
 
 # Test model.
-score = model.evaluate(x_test, y_test, batch_size=128)
+score = model.evaluate(x_test, y_test, batch_size=100)
 
 print('Test loss:', score[0])
 print('Test accuracy:', score[1])
