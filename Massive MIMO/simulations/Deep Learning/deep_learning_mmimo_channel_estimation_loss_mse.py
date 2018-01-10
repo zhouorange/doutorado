@@ -5,7 +5,7 @@ from keras.optimizers import SGD
 
 # Generate dummy data
 import numpy as np
-import scipy.io
+import scipy.io as sio
 
 # Specify the number of receiving antennas at Base Stattion (BS)
 M = 70
@@ -17,10 +17,10 @@ K = 10;
 N = K
 
 # Load training and test vectors.
-x_train = scipy.io.loadmat('train_vector.mat')
-y_train = scipy.io.loadmat('train_label.mat')
-x_test = scipy.io.loadmat('test_vector.mat')
-y_test = scipy.io.loadmat('test_label.mat')
+x_train = sio.loadmat('train_data.mat')
+y_train = sio.loadmat('train_label.mat')
+x_test = sio.loadmat('test_data.mat')
+y_test = sio.loadmat('test_label.mat')
 
 model = Sequential()
 # Dense(M*N*2*4) is a fully-connected layer with M*N*2*4 hidden units.

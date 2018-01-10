@@ -22,8 +22,8 @@ S = generatePilotMatrixFFT(N,K);
 % Simulation loop starts here.
 numTrainVectors = 10000;
 numTestVectors = 1000;
-train_vector = zeros(numTrainVectors,M*N*2);
-test_vector = zeros(numTestVectors,M*N*2);
+train_data = zeros(numTrainVectors,M*N*2);
+test_data = zeros(numTestVectors,M*N*2);
 train_label = zeros(numTrainVectors,2*M);
 test_label = zeros(numTestVectors,2*M);
 for q_idx=1:1:length(q)
@@ -75,9 +75,9 @@ for q_idx=1:1:length(q)
         for y_line_idx=1:1:size(Y1,1)
             for y_col_idx=1:1:size(Y1,2)
                 idx = idx + 1;
-                train_vector(trainIter,idx) = real(Y1(y_line_idx,y_col_idx));
+                train_data(trainIter,idx) = real(Y1(y_line_idx,y_col_idx));
                 idx = idx + 1;
-                train_vector(trainIter,idx) = imag(Y1(y_line_idx,y_col_idx));
+                train_data(trainIter,idx) = imag(Y1(y_line_idx,y_col_idx));
             end
         end
         
@@ -140,9 +140,9 @@ for q_idx=1:1:length(q)
         for y_line_idx=1:1:size(Y1,1)
             for y_col_idx=1:1:size(Y1,2)
                 idx = idx + 1;
-                test_vector(testIter,idx) = real(Y1(y_line_idx,y_col_idx));
+                test_data(testIter,idx) = real(Y1(y_line_idx,y_col_idx));
                 idx = idx + 1;
-                test_vector(testIter,idx) = imag(Y1(y_line_idx,y_col_idx));
+                test_data(testIter,idx) = imag(Y1(y_line_idx,y_col_idx));
             end
         end
         
@@ -160,8 +160,8 @@ for q_idx=1:1:length(q)
     
 end
 
-save('train_vector.mat','train_vector')
-save('train_label.mat','train_label')
+save('train_data.mat','train_data','-v7')
+save('train_label.mat','train_label','-v7')
 
-save('test_vector.mat','test_vector')
-save('test_label.mat','test_label')
+save('test_data.mat','test_data','-v7')
+save('test_label.mat','test_label','-v7')
