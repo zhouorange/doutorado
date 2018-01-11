@@ -95,7 +95,7 @@ for q_idx=1:1:length(q)
     
     %% Generate test vectors.
     test_data = zeros(numTestVectors,M*N*2);
-    test_label = zeros(numTestVectors,2*M);
+    test_label = zeros(numTestVectors,M*2);
     % loop starts here.
     for testIter = 1:1:numTestVectors
         
