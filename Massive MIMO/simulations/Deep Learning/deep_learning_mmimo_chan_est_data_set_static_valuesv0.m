@@ -2,6 +2,9 @@ clear all;close all;clc
 
 rng(1)
 
+numTrainVectors = 10000;
+numTestVectors = 1000;
+
 SNR = 10;                   % Signal-to-noise ratio (SNR) in dB.
 linear_SNR = 10.^(SNR./10); % Linear SNR value.
 
@@ -20,12 +23,12 @@ q = linear_SNR/(N*(1 + a*(L-1)));  % Uplink pilot power.
 S = generatePilotMatrixFFT(N,K);
 
 % Simulation loop starts here.
-numTrainVectors = 100000;
 train_data = zeros(numTrainVectors,M*N*2);
 train_label = zeros(numTrainVectors,2*M);
 for q_idx=1:1:length(q)
     
     %% Train vectors.
+    % loop starts here.
     for trainIter = 1:1:numTrainVectors
         
         beta_sum = 0;
@@ -84,21 +87,16 @@ for q_idx=1:1:length(q)
                 idx = idx + 1;
                 train_label(trainIter,idx) = real(g_111(g_line_idx,g_col_idx));
                 idx = idx + 1;
-                train_label(trainIter,idx) = imag(g_111(g_line_idx,g_col_idx));        
+                train_label(trainIter,idx) = imag(g_111(g_line_idx,g_col_idx));
             end
         end
         
     end
     
-end
-
-%% Generate tsest vectors.
-% Simulation loop starts here.
-numTestVectors = 10000;
-test_data = zeros(numTestVectors,M*N*2);
-test_label = zeros(numTestVectors,2*M);
-for q_idx=1:1:length(q)
-   
+    %% Generate test vectors.
+    test_data = zeros(numTestVectors,M*N*2);
+    test_label = zeros(numTestVectors,2*M);
+    % loop starts here.
     for testIter = 1:1:numTestVectors
         
         beta_sum = 0;
@@ -157,13 +155,11 @@ for q_idx=1:1:length(q)
                 idx = idx + 1;
                 test_label(testIter,idx) = real(g_111(g_line_idx,g_col_idx));
                 idx = idx + 1;
-                test_label(testIter,idx) = imag(g_111(g_line_idx,g_col_idx));        
+                test_label(testIter,idx) = imag(g_111(g_line_idx,g_col_idx));
             end
         end
-        
     end
     
+    fileName = sprintf('data_set_M_%d_K_%d_SNR_%d_static_scenario_1.mat',M,K,SNR(q_idx));
+    save(fileName,'train_data','train_label','test_data','test_label','-v7')
 end
-
-fileName = sprintf('data_set_M_%d_K_%d_SNR_%d_static_scenario_1.mat',M,K,SNR);
-save(fileName,'train_data','train_label','test_data','test_label','-v7')
