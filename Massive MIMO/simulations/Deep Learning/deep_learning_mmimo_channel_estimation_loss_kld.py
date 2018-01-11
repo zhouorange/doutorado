@@ -38,7 +38,7 @@ model.add(Dense(M*2, activation='linear'))
 sgd = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
 
 # Compile model.
-model.compile(loss='categorical_crossentropy', optimizer=sgd, metrics=['accuracy'])
+model.compile(loss='kullback_leibler_divergence', optimizer=sgd, metrics=['accuracy'])
 
 # Train model.
 model.fit(x_train, y_train, epochs=100, batch_size=100)

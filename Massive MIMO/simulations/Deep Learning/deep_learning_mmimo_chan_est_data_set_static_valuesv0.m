@@ -20,8 +20,8 @@ q = linear_SNR/(N*(1 + a*(L-1)));  % Uplink pilot power.
 S = generatePilotMatrixFFT(N,K);
 
 % Simulation loop starts here.
-numTrainVectors = 10000;
-numTestVectors = 1000;
+numTrainVectors = 100000;
+numTestVectors = 10000;
 train_data = zeros(numTrainVectors,M*N*2);
 test_data = zeros(numTestVectors,M*N*2);
 train_label = zeros(numTrainVectors,2*M);
@@ -160,8 +160,6 @@ for q_idx=1:1:length(q)
     
 end
 
-save('train_data.mat','train_data','-v7')
-save('train_label.mat','train_label','-v7')
+fileName = sprintf('data_set_M_%d_K_%d_SNR_%d_static_scenario_1.mat',M,K,SNR);
+save(fileName,'train_data','train_label','test_data','test_label','-v7')
 
-save('test_data.mat','test_data','-v7')
-save('test_label.mat','test_label','-v7')
