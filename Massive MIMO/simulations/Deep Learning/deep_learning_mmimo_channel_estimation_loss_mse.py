@@ -17,14 +17,12 @@ K = 10
 N = K
 
 # Load training and test vectors.
-x_train_mat = sio.loadmat('train_data.mat')
-x_train = x_train_mat['train_data']
-y_train_mat = sio.loadmat('train_label.mat')
-y_train = y_train_mat['train_label']
-x_test_mat = sio.loadmat('test_data.mat')
-x_test = x_test_mat['test_data']
-y_test_mat = sio.loadmat('test_label.mat')
-y_test = y_test_mat['test_label']
+
+data_set = sio.loadmat('data_set_M_70_K_10_SNR_10_static_scenario_1.mat')
+x_train = data_set['train_data']
+y_train = data_set['train_label']
+x_test = data_set['test_data']
+y_test = data_set['test_label']
 
 model = Sequential()
 # Dense(M*N*2*4) is a fully-connected layer with M*N*2*4 hidden units.

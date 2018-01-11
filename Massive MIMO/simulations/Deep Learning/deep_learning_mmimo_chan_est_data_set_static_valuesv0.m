@@ -21,11 +21,8 @@ S = generatePilotMatrixFFT(N,K);
 
 % Simulation loop starts here.
 numTrainVectors = 100000;
-numTestVectors = 10000;
 train_data = zeros(numTrainVectors,M*N*2);
-test_data = zeros(numTestVectors,M*N*2);
 train_label = zeros(numTrainVectors,2*M);
-test_label = zeros(numTestVectors,2*M);
 for q_idx=1:1:length(q)
     
     %% Train vectors.
@@ -93,7 +90,15 @@ for q_idx=1:1:length(q)
         
     end
     
-    %% Test vectors.
+end
+
+%% Generate tsest vectors.
+% Simulation loop starts here.
+numTestVectors = 10000;
+test_data = zeros(numTestVectors,M*N*2);
+test_label = zeros(numTestVectors,2*M);
+for q_idx=1:1:length(q)
+   
     for testIter = 1:1:numTestVectors
         
         beta_sum = 0;
@@ -162,4 +167,3 @@ end
 
 fileName = sprintf('data_set_M_%d_K_%d_SNR_%d_static_scenario_1.mat',M,K,SNR);
 save(fileName,'train_data','train_label','test_data','test_label','-v7')
-
