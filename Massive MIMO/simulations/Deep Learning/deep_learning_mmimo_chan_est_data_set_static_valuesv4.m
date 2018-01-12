@@ -2,8 +2,8 @@ clear all;close all;clc
 
 rng(1)
 
-numTrainVectors = 10000;
-numTestVectors = 1000;
+numTrainVectors = 100000;
+numTestVectors = 10000;
 numPredictionVectors = 100;
 
 SNR = 10;                   % Signal-to-noise ratio (SNR) in dB.
