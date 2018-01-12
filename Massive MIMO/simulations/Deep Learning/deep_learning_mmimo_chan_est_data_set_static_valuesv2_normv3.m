@@ -89,9 +89,8 @@ for q_idx=1:1:length(q)
                 train_data(trainIter,idx) = imag(Y1(y_line_idx,y_col_idx,trainIter));
             end
         end
-        
-        max_column = max(abs(real(train_data(trainIter,:))));
-        train_data(trainIter,:) = train_data(trainIter,:)./max_column;
+       
+        train_data(trainIter,:) = train_data(trainIter,:)./max_value;
         
         idx = 0;
         for g_line_idx=1:1:size(g_111,1)
@@ -101,8 +100,7 @@ for q_idx=1:1:length(q)
             train_label(trainIter,idx) = imag(g_111(g_line_idx,trainIter));
         end
         
-        max_column = max(abs(real(train_label(trainIter,:))));
-        train_label(trainIter,:) = train_label(trainIter,:)./max_column;      
+        train_label(trainIter,:) = train_label(trainIter,:)./max_value;      
     end
 
     %% Generate test vectors.
@@ -160,8 +158,7 @@ for q_idx=1:1:length(q)
             end
         end
         
-        max_column = max(abs(real(test_data(testIter,:))));
-        test_data(testIter,:) = test_data(testIter,:)./max_column;        
+        test_data(testIter,:) = test_data(testIter,:)./max_value;        
         
         idx = 0;
         for g_line_idx=1:1:size(g_111,1)
@@ -171,8 +168,7 @@ for q_idx=1:1:length(q)
             test_label(testIter,idx) = imag(g_111(g_line_idx,testIter));
         end
 
-        max_column = max(abs(real(test_label(testIter,:))));
-        test_label(testIter,:) = test_label(testIter,:)./max_column; 
+        test_label(testIter,:) = test_label(testIter,:)./max_value; 
         
     end
     
@@ -231,8 +227,7 @@ for q_idx=1:1:length(q)
             end
         end
         
-        max_column = max(abs(real(prediction_data(predictionIter,:))));
-        prediction_data(predictionIter,:) = prediction_data(predictionIter,:)./max_column; 
+        prediction_data(predictionIter,:) = prediction_data(predictionIter,:)./max_value; 
         
         idx = 0;
         for g_line_idx=1:1:size(g_111,1)
@@ -242,11 +237,10 @@ for q_idx=1:1:length(q)
             prediction_label(predictionIter,idx) = imag(g_111(g_line_idx,predictionIter));
         end
         
-        max_column = max(abs(real(prediction_label(predictionIter,:))));
-        prediction_label(predictionIter,:) = prediction_label(predictionIter,:)./max_column;         
+        prediction_label(predictionIter,:) = prediction_label(predictionIter,:)./max_value;         
     end
     
     %% Save data set for specfic scenario.
-    fileName = sprintf('data_set_M_%d_K_%d_SNR_%d_static_scenario_1_normv2.mat',M,K,SNR(q_idx));
+    fileName = sprintf('data_set_M_%d_K_%d_SNR_%d_static_scenario_1_normv3.mat',M,K,SNR(q_idx));
     save(fileName,'train_data','train_label','test_data','test_label','prediction_data','prediction_label','-v7')
 end
