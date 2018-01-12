@@ -24,12 +24,12 @@ q = linear_SNR/(N*(1 + a*(L-1)));  % Uplink pilot power.
 S = generatePilotMatrixFFT(N,K);
 
 % Simulation loop starts here.
-train_data = zeros(numTrainVectors,M*N*2);
-train_label = zeros(numTrainVectors,2*M);
-test_data = zeros(numTestVectors,M*N*2);
-test_label = zeros(numTestVectors,M*2);
-prediction_data = zeros(numPredictionVectors,M*N*2);
-prediction_label = zeros(numPredictionVectors,M*2);
+train_data = zeros(numTrainVectors*N,M*2);
+train_label = zeros(numTrainVectors*N,M*2);
+test_data = zeros(numTestVectors*N,M*2);
+test_label = zeros(numTestVectors*N,M*2);
+prediction_data = zeros(numPredictionVectors*N,M*2);
+prediction_label = zeros(numPredictionVectors*N,M*2);
 
 for q_idx=1:1:length(q)
     
@@ -74,26 +74,11 @@ for q_idx=1:1:length(q)
         % Received pilot-sequence symbols at BS #1, which is the target cell, i.e., i = 1.
         Y1 = sum_G + W1;
         
-        idx = 0;
-        for y_col_idx=1:1:size(Y1,2)
-            for y_line_idx=1:1:size(Y1,1)
-                idx = idx + 1;
-                train_data(trainIter,idx) = real(Y1(y_line_idx,y_col_idx));
-                idx = idx + 1;
-                train_data(trainIter,idx) = imag(Y1(y_line_idx,y_col_idx));
-            end
-        end
+        % Generate training data.
+        train_data = getDataVector(train_data,Y1,trainIter,N);
         
-        idx = 0;
-        for g_col_idx=1:1:size(g_111,2)
-            for g_line_idx=1:1:size(g_111,1)
-                idx = idx + 1;
-                train_label(trainIter,idx) = real(g_111(g_line_idx,g_col_idx));
-                idx = idx + 1;
-                train_label(trainIter,idx) = imag(g_111(g_line_idx,g_col_idx));
-            end
-        end
-        
+        % Generate label data.
+        train_label = getLabelVector(train_label,g_111,trainIter,N);
     end
     
     %% Generate test vectors.
@@ -136,26 +121,12 @@ for q_idx=1:1:length(q)
         
         % Received pilot-sequence symbols at BS #1, which is the target cell, i.e., i = 1.
         Y1 = sum_G + W1;
+             
+        % Generate training data.
+        test_data = getDataVector(test_data,Y1,trainIter,N);
         
-        idx = 0;
-        for y_col_idx=1:1:size(Y1,2)
-            for y_line_idx=1:1:size(Y1,1)
-                idx = idx + 1;
-                test_data(testIter,idx) = real(Y1(y_line_idx,y_col_idx));
-                idx = idx + 1;
-                test_data(testIter,idx) = imag(Y1(y_line_idx,y_col_idx));
-            end
-        end
-        
-        idx = 0;
-        for g_col_idx=1:1:size(g_111,2)
-            for g_line_idx=1:1:size(g_111,1)
-                idx = idx + 1;
-                test_label(testIter,idx) = real(g_111(g_line_idx,g_col_idx));
-                idx = idx + 1;
-                test_label(testIter,idx) = imag(g_111(g_line_idx,g_col_idx));
-            end
-        end
+        % Generate label data.
+        test_label = getLabelVector(test_label,g_111,trainIter,N);
     end
     
     %% Generate prediction vectors.
@@ -198,26 +169,12 @@ for q_idx=1:1:length(q)
         
         % Received pilot-sequence symbols at BS #1, which is the target cell, i.e., i = 1.
         Y1 = sum_G + W1;
+             
+        % Generate training data.
+        prediction_data = getDataVector(prediction_data,Y1,trainIter,N);
         
-        idx = 0;
-        for y_col_idx=1:1:size(Y1,2)
-            for y_line_idx=1:1:size(Y1,1)
-                idx = idx + 1;
-                prediction_data(predictionIter,idx) = real(Y1(y_line_idx,y_col_idx));
-                idx = idx + 1;
-                prediction_data(predictionIter,idx) = imag(Y1(y_line_idx,y_col_idx));
-            end
-        end
-        
-        idx = 0;
-        for g_col_idx=1:1:size(g_111,2)
-            for g_line_idx=1:1:size(g_111,1)
-                idx = idx + 1;
-                prediction_label(predictionIter,idx) = real(g_111(g_line_idx,g_col_idx));
-                idx = idx + 1;
-                prediction_label(predictionIter,idx) = imag(g_111(g_line_idx,g_col_idx));
-            end
-        end
+        % Generate label data.
+        prediction_label = getLabelVector(prediction_label,g_111,trainIter,N);        
     end
     
     %% Save data set for specfic scenario.
