@@ -98,6 +98,9 @@ for q_idx=1:1:length(q)
             idx = idx + 1;
             train_label(trainIter,idx) = imag(g_111(g_line_idx,trainIter));
         end
+        
+        max_column = max(abs(real(train_label(trainIter,:))));
+        train_label(trainIter,:) = train_label(trainIter,:)./max_column;      
     end
 
     %% Generate test vectors.
@@ -165,6 +168,10 @@ for q_idx=1:1:length(q)
             idx = idx + 1;
             test_label(testIter,idx) = imag(g_111(g_line_idx,testIter));
         end
+
+        max_column = max(abs(real(test_label(testIter,:))));
+        test_label(testIter,:) = test_label(testIter,:)./max_column; 
+        
     end
     
     %% Generate prediction vectors.
@@ -232,6 +239,9 @@ for q_idx=1:1:length(q)
             idx = idx + 1;
             prediction_label(predictionIter,idx) = imag(g_111(g_line_idx,predictionIter));
         end
+        
+        max_column = max(abs(real(prediction_label(predictionIter,:))));
+        prediction_label(predictionIter,:) = prediction_label(predictionIter,:)./max_column;         
     end
     
     %% Save data set for specfic scenario.
