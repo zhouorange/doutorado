@@ -143,7 +143,7 @@ for q_idx=1:1:length(q)
         Y1 = sum_G + W1;
              
         % Generate training data.
-        line_idx = N*(trainIter-1);
+        line_idx = N*(testIter-1);
         for y_col_idx=1:1:size(Y1,2)
             column_idx = 0;
             line_idx = line_idx + 1;
@@ -156,7 +156,7 @@ for q_idx=1:1:length(q)
         end
         
         % Generate label data.
-        line_idx = N*(trainIter-1);
+        line_idx = N*(testIter-1);
         for y_col_idx=1:1:N
             column_idx = 0;
             line_idx = line_idx + 1;
@@ -211,7 +211,7 @@ for q_idx=1:1:length(q)
         Y1 = sum_G + W1;
              
         % Generate training data.
-        line_idx = N*(trainIter-1);
+        line_idx = N*(predictionIter-1);
         for y_col_idx=1:1:size(Y1,2)
             column_idx = 0;
             line_idx = line_idx + 1;
@@ -224,7 +224,7 @@ for q_idx=1:1:length(q)
         end
         
         % Generate label data.
-        line_idx = N*(trainIter-1);
+        line_idx = N*(predictionIter-1);
         for y_col_idx=1:1:N
             column_idx = 0;
             line_idx = line_idx + 1;
