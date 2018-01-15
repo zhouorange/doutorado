@@ -66,8 +66,7 @@ for q_idx=1:1:length(q)
             % This is the label.
             if(l == 1)
                 g_111(:,trainIter) = Gil(:,1,l);
-            end
-            
+            end        
         end
         
         % Apply squared pilot power.
@@ -83,6 +82,8 @@ for q_idx=1:1:length(q)
         Z11_ls(:,trainIter) = (1/(sqrt(q(q_idx))*N))*Y1(:,:,trainIter)*S(:,1); 
     end
     
+    error_train_ls = sum(sum(abs(Z11_ls - g_111),1)/M)/numTrainVectors;
+   
     for trainIter = 1:1:numTrainVectors
         idx = 0;
         for zls_idx=1:1:M
@@ -104,12 +105,14 @@ for q_idx=1:1:length(q)
         
         train_label(trainIter,:) = train_label(trainIter,:)./max_value;      
     end
+    
+    error_train_vectors_ls = sum(sum(abs(train_data - train_label),2)/2*M)/numTrainVectors;
 
     %% Generate test vectors.
     % loop starts here.
     Y1 = zeros(M,N,numTestVectors);
     g_111 = zeros(M,numTestVectors);
-    Z11_ls = zeros(M,numTrainVectors);
+    Z11_ls = zeros(M,numTestVectors);
     for testIter = 1:1:numTestVectors
         
         beta_sum = 0;
@@ -153,6 +156,8 @@ for q_idx=1:1:length(q)
         Z11_ls(:,testIter) = (1/(sqrt(q(q_idx))*N))*Y1(:,:,testIter)*S(:,1); 
     end
     
+    error_test_ls = sum(sum(abs(Z11_ls - g_111),1)/M)/numTestVectors;
+    
     for testIter = 1:1:numTestVectors
         idx = 0;
         for zls_idx=1:1:M
@@ -173,14 +178,15 @@ for q_idx=1:1:length(q)
         end
 
         test_label(testIter,:) = test_label(testIter,:)./max_value; 
-        
     end
     
+    error_test_vectors_ls = sum(sum(abs(test_data - test_label),2)/2*M)/numTestVectors;
+ 
     %% Generate prediction vectors.
     % loop starts here.
     Y1 = zeros(M,N,numPredictionVectors);
     g_111 = zeros(M,numPredictionVectors);
-    Z11_ls = zeros(M,numTrainVectors);
+    Z11_ls = zeros(M,numPredictionVectors);
     for predictionIter = 1:1:numPredictionVectors
         
         beta_sum = 0;
@@ -223,6 +229,8 @@ for q_idx=1:1:length(q)
         % Least Squares estimation.
         Z11_ls(:,predictionIter) = (1/(sqrt(q(q_idx))*N))*Y1(:,:,predictionIter)*S(:,1);  
     end
+    
+    error_prediction_ls = sum(sum(abs(Z11_ls - g_111),1)/M)/numPredictionVectors;
     
     for predictionIter = 1:1:numPredictionVectors        
         idx = 0;
