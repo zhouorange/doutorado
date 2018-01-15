@@ -232,6 +232,7 @@ for q_idx=1:1:length(q)
     
     error_prediction_ls = sum(sum(abs(Z11_ls - g_111),1)/M)/numPredictionVectors;
     
+    error_prediction = zeros(1,numPredictionVectors);
     for predictionIter = 1:1:numPredictionVectors        
         idx = 0;
         for zls_idx=1:1:M
@@ -251,10 +252,15 @@ for q_idx=1:1:length(q)
             prediction_label(predictionIter,idx) = imag(g_111(g_line_idx,predictionIter));
         end
         
-        prediction_label(predictionIter,:) = prediction_label(predictionIter,:)./max_value;         
+        prediction_label(predictionIter,:) = prediction_label(predictionIter,:)./max_value;  
+        
+        sub_vectors = prediction_data(predictionIter,:) - prediction_label(predictionIter,:);
+        abs_vectors = abs(sub_vectors);
+        sum_vectors = sum(abs_vectors);
+        error_prediction(predictionIter) = sum_vectors/(2*M);
     end
     
     %% Save data set for specfic scenario.
     fileName = sprintf('data_set_M_%d_K_%d_SNR_%d_static_scenario_1_ls_est_v0.mat',M,K,SNR(q_idx));
-    save(fileName,'train_data','train_label','test_data','test_label','prediction_data','prediction_label','-v7')
+    save(fileName,'train_data','train_label','test_data','test_label','prediction_data','prediction_label','error_prediction','-v7')
 end
