@@ -26,11 +26,11 @@ q = linear_SNR/(N*(1 + a*(L-1)));  % Uplink pilot power.
 S = generatePilotMatrixFFT(N,K);
 
 % Simulation loop starts here.
-train_data = zeros(numTrainVectors,M*N*2);
-train_label = zeros(numTrainVectors,2*M);
-test_data = zeros(numTestVectors,M*N*2);
+train_data = zeros(numTrainVectors,M*2);
+train_label = zeros(numTrainVectors,M*2);
+test_data = zeros(numTestVectors,M*2);
 test_label = zeros(numTestVectors,M*2);
-prediction_data = zeros(numPredictionVectors,M*N*2);
+prediction_data = zeros(numPredictionVectors,M*2);
 prediction_label = zeros(numPredictionVectors,M*2);
 
 for q_idx=1:1:length(q)
@@ -39,6 +39,7 @@ for q_idx=1:1:length(q)
     % loop starts here.
     Y1 = zeros(M,N,numTrainVectors);
     g_111 = zeros(M,numTrainVectors);
+    Z11_ls = zeros(M,numTrainVectors);
     for trainIter = 1:1:numTrainVectors
         
         beta_sum = 0;
@@ -77,17 +78,18 @@ for q_idx=1:1:length(q)
         
         % Received pilot-sequence symbols at BS #1, which is the target cell, i.e., i = 1.
         Y1(:,:,trainIter) = sum_G + W1;
+        
+        % Least Squares estimation.
+        Z11_ls(:,trainIter) = (1/(sqrt(q(q_idx))*N))*Y1(:,:,trainIter)*S(:,1); 
     end
     
     for trainIter = 1:1:numTrainVectors
         idx = 0;
-        for y_col_idx=1:1:size(Y1,2)
-            for y_line_idx=1:1:size(Y1,1)
-                idx = idx + 1;
-                train_data(trainIter,idx) = real(Y1(y_line_idx,y_col_idx,trainIter));
-                idx = idx + 1;
-                train_data(trainIter,idx) = imag(Y1(y_line_idx,y_col_idx,trainIter));
-            end
+        for zls_idx=1:1:M
+            idx = idx + 1;
+            train_data(trainIter,idx) = real(Z11_ls(zls_idx,trainIter));
+            idx = idx + 1;
+            train_data(trainIter,idx) = imag(Z11_ls(zls_idx,trainIter));            
         end
        
         train_data(trainIter,:) = train_data(trainIter,:)./max_value;
@@ -107,6 +109,7 @@ for q_idx=1:1:length(q)
     % loop starts here.
     Y1 = zeros(M,N,numTestVectors);
     g_111 = zeros(M,numTestVectors);
+    Z11_ls = zeros(M,numTrainVectors);
     for testIter = 1:1:numTestVectors
         
         beta_sum = 0;
@@ -145,17 +148,18 @@ for q_idx=1:1:length(q)
         
         % Received pilot-sequence symbols at BS #1, which is the target cell, i.e., i = 1.
         Y1(:,:,testIter) = sum_G + W1;
+        
+        % Least Squares estimation.
+        Z11_ls(:,testIter) = (1/(sqrt(q(q_idx))*N))*Y1(:,:,testIter)*S(:,1); 
     end
     
     for testIter = 1:1:numTestVectors
         idx = 0;
-        for y_col_idx=1:1:size(Y1,2)
-            for y_line_idx=1:1:size(Y1,1)
-                idx = idx + 1;
-                test_data(testIter,idx) = real(Y1(y_line_idx,y_col_idx,testIter));
-                idx = idx + 1;
-                test_data(testIter,idx) = imag(Y1(y_line_idx,y_col_idx,testIter));
-            end
+        for zls_idx=1:1:M
+            idx = idx + 1;
+            test_data(testIter,idx) = real(Z11_ls(zls_idx,testIter));
+            idx = idx + 1;
+            test_data(testIter,idx) = imag(Z11_ls(zls_idx,testIter));            
         end
         
         test_data(testIter,:) = test_data(testIter,:)./max_value;        
@@ -176,6 +180,7 @@ for q_idx=1:1:length(q)
     % loop starts here.
     Y1 = zeros(M,N,numPredictionVectors);
     g_111 = zeros(M,numPredictionVectors);
+    Z11_ls = zeros(M,numTrainVectors);
     for predictionIter = 1:1:numPredictionVectors
         
         beta_sum = 0;
@@ -214,18 +219,19 @@ for q_idx=1:1:length(q)
         
         % Received pilot-sequence symbols at BS #1, which is the target cell, i.e., i = 1.
         Y1(:,:,predictionIter) = sum_G + W1;
+        
+        % Least Squares estimation.
+        Z11_ls(:,predictionIter) = (1/(sqrt(q(q_idx))*N))*Y1(:,:,predictionIter)*S(:,1);  
     end
     
-    for predictionIter = 1:1:numPredictionVectors
+    for predictionIter = 1:1:numPredictionVectors        
         idx = 0;
-        for y_col_idx=1:1:size(Y1,2)
-            for y_line_idx=1:1:size(Y1,1)
-                idx = idx + 1;
-                prediction_data(predictionIter,idx) = real(Y1(y_line_idx,y_col_idx,predictionIter));
-                idx = idx + 1;
-                prediction_data(predictionIter,idx) = imag(Y1(y_line_idx,y_col_idx,predictionIter));
-            end
-        end
+        for zls_idx=1:1:M
+            idx = idx + 1;
+            prediction_data(predictionIter,idx) = real(Z11_ls(zls_idx,predictionIter));
+            idx = idx + 1;
+            prediction_data(predictionIter,idx) = imag(Z11_ls(zls_idx,predictionIter));            
+        end        
         
         prediction_data(predictionIter,:) = prediction_data(predictionIter,:)./max_value; 
         
@@ -241,6 +247,6 @@ for q_idx=1:1:length(q)
     end
     
     %% Save data set for specfic scenario.
-    fileName = sprintf('data_set_M_%d_K_%d_SNR_%d_static_scenario_1_normv3.mat',M,K,SNR(q_idx));
+    fileName = sprintf('data_set_M_%d_K_%d_SNR_%d_static_scenario_1_ls_est_v0.mat',M,K,SNR(q_idx));
     save(fileName,'train_data','train_label','test_data','test_label','prediction_data','prediction_label','-v7')
 end
