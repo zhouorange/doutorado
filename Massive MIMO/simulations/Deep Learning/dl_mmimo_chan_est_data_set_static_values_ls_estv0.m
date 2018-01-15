@@ -6,7 +6,7 @@ numTrainVectors = 10000;
 numTestVectors = 1000;
 numPredictionVectors = 100;
 
-max_value = 1;
+max_value = 5;
 
 SNR = 10;                   % Signal-to-noise ratio (SNR) in dB.
 linear_SNR = 10.^(SNR./10); % Linear SNR value.
