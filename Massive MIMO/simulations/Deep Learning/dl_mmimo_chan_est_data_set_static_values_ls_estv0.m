@@ -2,7 +2,7 @@ clear all;close all;clc
 
 rng(1)
 
-numTrainVectors = 10000;
+numTrainVectors = 30000;
 numTestVectors = 1000;
 numPredictionVectors = 100;
 
