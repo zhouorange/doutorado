@@ -2,7 +2,7 @@ clear all;close all;clc
 
 rng(1)
 
-numTrainVectors = 10000;
+numTrainVectors = 30000;
 numTestVectors = 1000;
 numPredictionVectors = 100;
 
@@ -244,6 +244,6 @@ for q_idx=1:1:length(q)
     end
     
     %% Save data set for specfic scenario.
-    fileName = sprintf('data_set_M_%d_K_%d_SNR_%d_static_scenario_1.mat',M,K,SNR(q_idx));
+    fileName = sprintf('data_set_M_%d_K_%d_SNR_%d_static_scenario_1_norm.mat',M,K,SNR(q_idx));
     save(fileName,'train_data','train_label','test_data','test_label','prediction_data','prediction_label','-v7')
 end

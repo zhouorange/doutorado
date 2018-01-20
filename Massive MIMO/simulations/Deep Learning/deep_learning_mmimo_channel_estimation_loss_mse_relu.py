@@ -18,7 +18,7 @@ N = K
 # Specify batch size
 batch_size = 100
 # Specify number of epochs.
-number_of_epochs = 50
+number_of_epochs = 40
 
 # Load training and test vectors.
 data_set = sio.loadmat('data_set_M_70_K_10_SNR_10_static_scenario_1_normv3.mat')
@@ -31,9 +31,9 @@ y_predict = data_set['prediction_label']
 
 # Create Model.
 model = Sequential()
-model.add(Dense(M*N*2*2, activation='tanh', input_dim=M*N*2))
+model.add(Dense(M*N*2*2, activation='relu', input_dim=M*N*2))
 #model.add(Dropout(0.5))
-model.add(Dense(M*N*2, activation='tanh'))
+model.add(Dense(M*N*2, activation='relu'))
 #model.add(Dropout(0.5))
 model.add(Dense(M*2, activation='linear'))
 
@@ -59,4 +59,5 @@ predictions = model.predict(x_predict)
 for i in range(len(y_predict)):
    for j in range(2*M):
       print('expected: %f - actual: %f' % (y_predict[i][j],predictions[i][j]))
+
 

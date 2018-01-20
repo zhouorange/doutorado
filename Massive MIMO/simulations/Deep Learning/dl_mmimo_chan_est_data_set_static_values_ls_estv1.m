@@ -291,6 +291,6 @@ for q_idx=1:1:length(q)
     end
     
     %% Save data set for specfic scenario.
-    fileName = sprintf('data_set_M_%d_K_%d_SNR_%d_static_scenario_1_ls_est_v0.mat',M,K,SNR(q_idx));
+    fileName = sprintf('data_set_M_%d_K_%d_SNR_%d_static_scenario_1_ls_est_v1.mat',M,K,SNR(q_idx));
     save(fileName,'train_data','train_label','test_data','test_label','prediction_data','prediction_label','error_prediction','-v7')
 end
