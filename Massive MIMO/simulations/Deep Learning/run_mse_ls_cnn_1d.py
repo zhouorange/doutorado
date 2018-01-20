@@ -28,6 +28,9 @@ output_layer_size = M*2
 # Specify the kernel size.
 kernel_size = 3
 
+# Specify the optimizer.
+optimizer = 'adam'
+
 t = time.localtime()
 timestamp = time.strftime('%d%Y%H%M%S', t)
 filename = 'mse_ls_cnn_1d_%s.txt' % (timestamp)
@@ -46,7 +49,8 @@ input_layer_size = M*2
 second_layer_size = M*2
 output_layer_size = M*2
 kernel_size = 1
-cmd = 'python deep_learning_mmimo_channel_estimation_loss_mse_ls_cnn_1d.py %d %d %d %d %d %d %d %d %d %d %s&' % (M,L,K,N,batch_size,number_of_epochs,input_layer_size,second_layer_size,output_layer_size,kernel_size,filename)
+optimizer = 'sgd'
+cmd = 'python deep_learning_mmimo_channel_estimation_loss_mse_ls_cnn_1d.py %d %d %d %d %d %d %d %d %d %d %s %s&' % (M,L,K,N,batch_size,number_of_epochs,input_layer_size,second_layer_size,output_layer_size,kernel_size,filename,optimizer)
 os.system(cmd)
 
 
@@ -54,7 +58,8 @@ input_layer_size = M*2
 second_layer_size = M*2
 output_layer_size = M*2
 kernel_size = 2
-cmd = 'python deep_learning_mmimo_channel_estimation_loss_mse_ls_cnn_1d.py %d %d %d %d %d %d %d %d %d %d %s&' % (M,L,K,N,batch_size,number_of_epochs,input_layer_size,second_layer_size,output_layer_size,kernel_size,filename)
+optimizer = 'sgd'
+cmd = 'python deep_learning_mmimo_channel_estimation_loss_mse_ls_cnn_1d.py %d %d %d %d %d %d %d %d %d %d %s %s&' % (M,L,K,N,batch_size,number_of_epochs,input_layer_size,second_layer_size,output_layer_size,kernel_size,filename,optimizer)
 os.system(cmd)
 
 
@@ -62,7 +67,8 @@ input_layer_size = M*2
 second_layer_size = M*2
 output_layer_size = M*2
 kernel_size = 3
-cmd = 'python deep_learning_mmimo_channel_estimation_loss_mse_ls_cnn_1d.py %d %d %d %d %d %d %d %d %d %d %s&' % (M,L,K,N,batch_size,number_of_epochs,input_layer_size,second_layer_size,output_layer_size,kernel_size,filename)
+optimizer = 'sgd'
+cmd = 'python deep_learning_mmimo_channel_estimation_loss_mse_ls_cnn_1d.py %d %d %d %d %d %d %d %d %d %d %s %s&' % (M,L,K,N,batch_size,number_of_epochs,input_layer_size,second_layer_size,output_layer_size,kernel_size,filename,optimizer)
 os.system(cmd)
 
 
@@ -70,5 +76,7 @@ input_layer_size = M*2
 second_layer_size = M*2
 output_layer_size = M*2
 kernel_size = 4
-cmd = 'python deep_learning_mmimo_channel_estimation_loss_mse_ls_cnn_1d.py %d %d %d %d %d %d %d %d %d %d %s&' % (M,L,K,N,batch_size,number_of_epochs,input_layer_size,second_layer_size,output_layer_size,kernel_size,filename)
+optimizer = 'sgd'
+cmd = 'python deep_learning_mmimo_channel_estimation_loss_mse_ls_cnn_1d.py %d %d %d %d %d %d %d %d %d %d %s %s&' % (M,L,K,N,batch_size,number_of_epochs,input_layer_size,second_layer_size,output_layer_size,kernel_size,filename,optimizer)
 os.system(cmd)
+

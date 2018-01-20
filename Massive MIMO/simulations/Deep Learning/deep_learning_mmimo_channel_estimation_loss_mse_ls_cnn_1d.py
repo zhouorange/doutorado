@@ -36,6 +36,9 @@ kernel_size = int(sys.argv[10]) #3
 filename = sys.argv[11]
 fid = open(filename, 'a')
 
+# Specify the optimizer.
+optim = sys.argv[12]
+
 # Load training and test vectors.
 data_set = sio.loadmat('data_set_M_70_K_10_SNR_10_static_scenario_1_ls_est_v1.mat')
 x_train = data_set['train_data']
@@ -67,8 +70,14 @@ model.add(Dense(output_layer_size, activation='tanh'))
 sgd = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
 adam = keras.optimizers.Adam()
 
+# Select optimizer.
+if(optim == 'adam'):
+   optimizer_1d = adam
+else:
+   optimizer_1d = sgd
+
 # Compile model.
-model.compile(loss='mean_squared_error', optimizer=adam, metrics=['accuracy'])
+model.compile(loss='mean_squared_error', optimizer=optimizer_1d, metrics=['accuracy'])
 
 # Train model.
 train_history = model.fit(x_train, y_train, epochs=number_of_epochs, batch_size=batch_size)
@@ -100,9 +109,9 @@ if(1):
 
 # Write result into file.
 if(second_layer_size > 0):
-   fid.write('%d\t%d\t%d\t%d\t%f\t%f\t%f\t%f\t%f\t%f\n' % (input_layer_size,second_layer_size,output_layer_size,kernel_size,train_history.history['loss'][number_of_epochs-1],train_history.history['acc'][number_of_epochs-1],score[0],score[1],total_avg_error_dl/len(y_predict),total_avg_error_ls/len(y_predict)))
+   fid.write('%d\t%s\t%d\t%d\t%d\t%d\t%f\t%f\t%f\t%f\t%f\t%f\n' % (number_of_epochs,optim,input_layer_size,second_layer_size,output_layer_size,kernel_size,train_history.history['loss'][number_of_epochs-1],train_history.history['acc'][number_of_epochs-1],score[0],score[1],total_avg_error_dl/len(y_predict),total_avg_error_ls/len(y_predict)))
 else:
-   fid.write('%d\t%d\t%f\t%f\t%f\t%f\t%f\t%f\n' % (input_layer_size,output_layer_size,kernel_size,train_history.history['loss'][number_of_epochs-1],train_history.history['acc'][number_of_epochs-1],score[0],score[1],total_avg_error_dl/len(y_predict),total_avg_error_ls/len(y_predict)))
+   fid.write('%d\t%s\t%d\t%d\t%d\t%f\t%f\t%f\t%f\t%f\t%f\n' % (number_of_epochs,optim,input_layer_size,output_layer_size,kernel_size,train_history.history['loss'][number_of_epochs-1],train_history.history['acc'][number_of_epochs-1],score[0],score[1],total_avg_error_dl/len(y_predict),total_avg_error_ls/len(y_predict)))
 
 # Close file.
 fid.close()
