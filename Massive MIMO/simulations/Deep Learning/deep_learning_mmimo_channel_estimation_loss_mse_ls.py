@@ -1,3 +1,4 @@
+import sys
 import keras
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Activation
@@ -7,7 +8,7 @@ from keras.optimizers import SGD
 import numpy as np
 import scipy.io as sio
 
-# Specify the number of receiving antennas at Base Stattion (BS)
+# Specify the number of receiving antennas at Base Station (BS)
 M = int(sys.argv[1]) #70
 # Specify the number of cells.
 L = int(sys.argv[2]) #7
@@ -27,12 +28,15 @@ second_layer_size = int(sys.argv[8])
 # Specify number of neurons in output layer.
 output_layer_size = int(sys.argv[9])
 
+# Specify the optimizer.
+optim = sys.argv[10]
+
 # Open file.
-filename = sys.argv[10]
-fid = open(filename, 'a') 
+filename = sys.argv[11]
+fid = open(filename, 'a')
 
 # Load training and test vectors.
-data_set = sio.loadmat('data_set_M_70_K_10_SNR_10_static_scenario_1_ls_est_v1.mat')
+data_set = sio.loadmat('data_set_M_70_K_10_SNR_10_static_scenario_1_ls_est_v2.mat')
 x_train = data_set['train_data']
 y_train = data_set['train_label']
 x_test = data_set['test_data']
@@ -40,6 +44,8 @@ y_test = data_set['test_label']
 x_predict = data_set['prediction_data']
 y_predict = data_set['prediction_label']
 predict_error = data_set['error_prediction']
+ls_prediction_error = data_set['ls_prediction_error']
+mmse_prediction_error = data_set['mmse_prediction_error']
 
 # Create Model.
 model = Sequential()
@@ -54,8 +60,14 @@ model.add(Dense(output_layer_size, activation='tanh'))
 sgd = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
 adam = keras.optimizers.Adam()
 
+# Select optimizer.
+if(optim == 'adam'):
+   optimizer_ls = adam
+else:
+   optimizer_ls = sgd
+
 # Compile model.
-model.compile(loss='mean_squared_error', optimizer=sgd, metrics=['accuracy'])
+model.compile(loss='mean_squared_error', optimizer=optimizer_ls, metrics=['accuracy'])
 
 # Train model.
 train_history = model.fit(x_train, y_train, epochs=number_of_epochs, batch_size=batch_size)

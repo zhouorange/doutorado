@@ -55,11 +55,11 @@ predict_error = data_set['error_prediction']
 # Create Model.
 model = Sequential()
 model.add(Conv1D(input_layer_size, kernel_size, activation='tanh', input_shape=(M*2, 1)))
-#model.add(Conv1D(input_layer_size, kernel_size, activation='tanh'))
+model.add(Conv1D(input_layer_size, kernel_size, activation='tanh'))
 model.add(MaxPooling1D(kernel_size))
 if(second_layer_size > 0):
    model.add(Conv1D(second_layer_size, kernel_size, activation='tanh'))
-   #model.add(Conv1D(second_layer_size, kernel_size, activation='tanh'))
+   model.add(Conv1D(second_layer_size, kernel_size, activation='tanh'))
    model.add(MaxPooling1D(kernel_size))
 model.add(Flatten())
 #model.add(GlobalAveragePooling1D())
