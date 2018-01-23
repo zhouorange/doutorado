@@ -32,12 +32,15 @@ S = generatePilotMatrixFFT(N,K);
 
 % Simulation loop starts here.
 train_data = zeros(numTrainVectors,2,M);
-train_label = zeros(numTrainVectors,2,M);
+train_label = zeros(numTrainVectors,2*M);
+train_ls = zeros(numTrainVectors,2*M);
 test_data = zeros(numTestVectors,2,M);
-test_label = zeros(numTestVectors,2,M); 
+test_label = zeros(numTestVectors,2*M); 
+test_ls = zeros(numTestVectors,2*M);
 prediction_data = zeros(numPredictionVectors,2,M);
-prediction_label = zeros(numPredictionVectors,2,M);
-mmse_vector = zeros(numPredictionVectors,2,M);
+prediction_label = zeros(numPredictionVectors,2*M);
+prediction_ls = zeros(numPredictionVectors,2*M);
+mmse_vector = zeros(numPredictionVectors,2*M);
 
 for q_idx=1:1:length(q)
     
@@ -121,22 +124,36 @@ for q_idx=1:1:length(q)
         
         train_data(trainIter,:,:) = train_data(trainIter,:,:)./max_value;
         
+        idx = 0;
         for iq_idx=1:1:2
-            idx = 0;
             for g_line_idx=1:1:size(g_111,1)
                 idx = idx + 1;
                 if(iq_idx==1)
-                    train_label(trainIter,iq_idx,idx) = real(g_111(g_line_idx,trainIter));
+                    train_label(trainIter,idx) = real(g_111(g_line_idx,trainIter));
                 else
-                    train_label(trainIter,iq_idx,idx) = imag(g_111(g_line_idx,trainIter));
+                    train_label(trainIter,idx) = imag(g_111(g_line_idx,trainIter));
                 end
             end
         end
         
-        train_label(trainIter,:,:) = train_label(trainIter,:,:)./max_value;
+        train_label(trainIter,:) = train_label(trainIter,:)./max_value;
+        
+        idx = 0;
+        for iq_idx=1:1:2
+            for g_line_idx=1:1:M
+                idx = idx + 1;
+                if(iq_idx==1)
+                    train_ls(trainIter,idx) = real(Z11_ls(g_line_idx,trainIter));
+                else
+                    train_ls(trainIter,idx) = imag(Z11_ls(g_line_idx,trainIter));
+                end
+            end
+        end
+        
+        train_ls(trainIter,:) = train_ls(trainIter,:)./max_value;
     end
     
-    error_train_vectors_ls = sum(sum(abs(train_data - train_label),2)/2*M)/numTrainVectors;
+    error_train_vectors_ls = sum(sum(abs(train_ls - train_label),2))/(2*M*numTrainVectors);
     
     %% Generate test vectors.
     % loop starts here.
@@ -207,22 +224,36 @@ for q_idx=1:1:length(q)
         
         test_data(testIter,:,:) = test_data(testIter,:,:)./max_value;
         
+        idx = 0;
         for iq_idx=1:1:2
-            idx = 0;
             for g_line_idx=1:1:size(g_111,1)
                 idx = idx + 1;
                 if(iq_idx==1)
-                    test_label(testIter,iq_idx,idx) = real(g_111(g_line_idx,testIter));
+                    test_label(testIter,idx) = real(g_111(g_line_idx,testIter));
                 else
-                    test_label(testIter,iq_idx,idx) = imag(g_111(g_line_idx,testIter));
+                    test_label(testIter,idx) = imag(g_111(g_line_idx,testIter));
                 end
             end
         end
         
-        test_label(testIter,:,:) = test_label(testIter,:,:)./max_value;
+        test_label(testIter,:) = test_label(testIter,:)./max_value;
+        
+        idx = 0;
+        for iq_idx=1:1:2
+            for g_line_idx=1:1:M
+                idx = idx + 1;
+                if(iq_idx==1)
+                    test_ls(testIter,idx) = real(Z11_ls(g_line_idx,testIter));
+                else
+                    test_ls(testIter,idx) = imag(Z11_ls(g_line_idx,testIter));
+                end
+            end
+        end
+        
+        test_ls(testIter,:) = test_ls(testIter,:)./max_value;        
     end
     
-    error_test_vectors_ls = sum(sum(abs(test_data - test_label),2)/2*M)/numTestVectors;
+    error_test_vectors_ls = sum(sum(abs(test_ls - test_label),2))/(2*M*numTestVectors);
     
     %% Generate prediction vectors.
     % loop starts here.
@@ -306,41 +337,55 @@ for q_idx=1:1:length(q)
         
         prediction_data(predictionIter,:,:) = prediction_data(predictionIter,:,:)./max_value;
         
+        idx = 0;
         for iq_idx=1:1:2
-            idx = 0;
             for g_line_idx=1:1:size(g_111,1)
                 idx = idx + 1;
                 if(iq_idx==1)
-                    prediction_label(predictionIter,iq_idx,idx) = real(g_111(g_line_idx,predictionIter));
+                    prediction_label(predictionIter,idx) = real(g_111(g_line_idx,predictionIter));
                 else
-                    prediction_label(predictionIter,iq_idx,idx) = imag(g_111(g_line_idx,predictionIter));
+                    prediction_label(predictionIter,idx) = imag(g_111(g_line_idx,predictionIter));
                 end
             end
         end
         
-        prediction_label(predictionIter,:,:) = prediction_label(predictionIter,:,:)./max_value;
+        prediction_label(predictionIter,:) = prediction_label(predictionIter,:)./max_value;
         
-        sub_vectors = prediction_data(predictionIter,:) - prediction_label(predictionIter,:);
+        idx = 0;
+        for iq_idx=1:1:2
+            for g_line_idx=1:1:M
+                idx = idx + 1;
+                if(iq_idx==1)
+                    prediction_ls(predictionIter,idx) = real(Z11_ls(g_line_idx,predictionIter));
+                else
+                    prediction_ls(predictionIter,idx) = imag(Z11_ls(g_line_idx,predictionIter));
+                end
+            end
+        end
+        
+        prediction_ls(predictionIter,:) = prediction_ls(predictionIter,:)./max_value;
+        
+        sub_vectors = prediction_ls(predictionIter,:) - prediction_label(predictionIter,:);
         abs_vectors = abs(sub_vectors);
         sum_vectors = sum(abs_vectors);
         error_prediction(predictionIter) = sum_vectors/(2*M);
         
         %------------------ MMSE vector for error assessment --------------
+        idx = 0;
         for iq_idx=1:1:2
-            idx = 0;
             for zmmse_idx=1:1:M
                 idx = idx + 1;
                 if(iq_idx==1)
-                    mmse_vector(predictionIter,iq_idx,idx) = real(Z11_mmse(zmmse_idx,predictionIter));
+                    mmse_vector(predictionIter,idx) = real(Z11_mmse(zmmse_idx,predictionIter));
                 else
-                    mmse_vector(predictionIter,iq_idx,idx) = imag(Z11_mmse(zmmse_idx,predictionIter));
+                    mmse_vector(predictionIter,idx) = imag(Z11_mmse(zmmse_idx,predictionIter));
                 end
             end
         end
         
-        mmse_vector(predictionIter,:,:) = mmse_vector(predictionIter,:,:)./max_value;
+        mmse_vector(predictionIter,:) = mmse_vector(predictionIter,:)./max_value;
         
-        sub_vectors = mmse_vector(predictionIter,:,:) - prediction_label(predictionIter,:,:);
+        sub_vectors = mmse_vector(predictionIter,:) - prediction_label(predictionIter,:);
         abs_vectors = abs(sub_vectors);
         sum_vectors = sum(abs_vectors);
         mmse_prediction_error_vector(predictionIter) = sum(sum_vectors)/(2*M);        
